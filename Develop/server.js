@@ -1,5 +1,5 @@
 const express = require('express');
-
+const fs = require("fs")
 const app = express();
 
 const PORT = 3001;
@@ -30,11 +30,13 @@ app.get("/notes", (req, res) => {
     res.sendFile(__dirname + "/public/notes.html");
 });
 
-
+// switch to /api/note
 // post additional notes to the api
-app.post("/api/newnotes", (req, res) => {
+app.post("/api/notes", (req, res) => {
     notesData.push(req.body);
     res.send("Note Saved!");
+    //need to write to file at this point
+
     // console.log(req.body);
     // res.json(`${req.body}`);
 });
