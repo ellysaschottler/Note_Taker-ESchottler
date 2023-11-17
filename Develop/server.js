@@ -34,6 +34,7 @@ app.get("/notes", (req, res) => {
 // post additional notes to the api
 app.post("/api/newnotes", (req, res) => {
     notesData.push(req.body);
+    res.send("Note Saved!");
     // console.log(req.body);
     // res.json(`${req.body}`);
 });
