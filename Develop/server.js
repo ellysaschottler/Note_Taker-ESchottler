@@ -18,10 +18,6 @@ app.get("/api/notes", (req, res) => {
     res.json(notesData);
 })
 
-// app.get('/', (req, res) => {
-//   res.send("yay");
-// });
-
 //serve up the homepage on the root)
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
@@ -34,25 +30,25 @@ app.get("/notes", (req, res) => {
 
 // post additional notes to the api
 app.post("/api/notes", (req, res) => {
-    notesData.push(req.body);
     res.send("Note Saved!");
 
-const {title, text } = req.body;
+    const {title, text } = req.body;
 
-if (title && text) {
-    const newNote = {
-        title,
-        text,
-        id : shortid.generate(),
-    };
+    if (title && text) {
+        const newNote = {
+            title,
+            text,
+            id : shortid.generate(),
+         };
 
-    const noteString = JSON.stringify(newNote);
 
-    fs.writeFile(`./db/${newNote.title}.json`, noteString, (err) =>
-        err
-            ? console.error(err)
-            : console.log(`New note has been written to JSON file`) 
-    );
+         notesData.push(newNote);
+        const notesString = JSON.stringify(notesData);
+        fs.writeFile('/db/db.json', notesString, (err) =>
+             err
+                 ? console.error(err)
+                : console.log(`New note has been written to JSON file`) 
+        );
     console.log(success);
 
     } else {
