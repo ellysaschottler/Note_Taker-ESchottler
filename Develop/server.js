@@ -4,13 +4,9 @@ const fs = require("fs")
 const shortid = require('shortid');
 const app = express();
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 const notesData = require("./db/db.json")
-
-// Helper method for generating unique ids  
-// see activity 18
-const uuid = require('./helpers/uuid');
 
 //middleware for parsing application/json
 app.use(express.json());
