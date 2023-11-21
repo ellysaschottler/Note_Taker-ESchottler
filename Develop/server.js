@@ -1,10 +1,16 @@
 const express = require('express');
 const fs = require("fs")
+//npm package to generate a unique ID
+const shortid = require('shortid');
 const app = express();
 
 const PORT = 3001;
 
 const notesData = require("./db/db.json")
+
+// Helper method for generating unique ids  
+// see activity 18
+const uuid = require('./helpers/uuid');
 
 //middleware for parsing application/json
 app.use(express.json());
@@ -30,15 +36,32 @@ app.get("/notes", (req, res) => {
     res.sendFile(__dirname + "/public/notes.html");
 });
 
-// switch to /api/note
 // post additional notes to the api
 app.post("/api/notes", (req, res) => {
     notesData.push(req.body);
     res.send("Note Saved!");
-    //need to write to file at this point
 
-    // console.log(req.body);
-    // res.json(`${req.body}`);
+const {title, text } = req.body;
+
+if (title && text) {
+    const newNote = {
+        title,
+        text,
+        id : shortid.generate(),
+    };
+
+    const noteString = JSON.stringify(newNote);
+
+    fs.writeFile(`./db/${newNote.title}.json`, noteString, (err) =>
+        err
+            ? console.error(err)
+            : console.log(`New note has been written to JSON file`) 
+    );
+    console.log(success);
+
+    } else {
+        res.status(500).json('Error in adding note');
+    }
 });
 
 
@@ -50,4 +73,3 @@ app.get("*", (req, res) => {
 app.listen(PORT, () => {
   console.log("Listening on PORT 3001");
 });
-
