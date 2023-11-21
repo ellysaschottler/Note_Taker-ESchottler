@@ -6,7 +6,7 @@ const app = express();
 
 const PORT = process.env.PORT || 3001;
 
-const notesData = require("./db/db.json")
+let notesData = require("./db/db.json")
 
 //middleware for parsing application/json
 app.use(express.json());
@@ -40,12 +40,7 @@ app.post("/api/notes", (req, res) => {
          };
 
         notesData.push(newNote);
-        const notesString = JSON.stringify(notesData, null, 2);
-        fs.writeFile('./db/db.json', notesString, (err) =>
-             err
-                 ? console.error(err)
-                : console.log(`New note has been written to JSON file`) 
-        );
+        saveNotesToFile()
         res.send("Note Saved!");
     } else {
         res.status(500).json('Error in adding note');
@@ -54,6 +49,7 @@ app.post("/api/notes", (req, res) => {
 
 app.delete("/api/notes/:id", (req, res) => {
     notesData = notesData.filter(note => note.id != req.params.id)
+    saveNotesToFile()
     res.send("note deleted")
 })
 
@@ -66,3 +62,14 @@ app.get("*", (req, res) => {
 app.listen(PORT, () => {
   console.log("Listening on PORT 3001");
 });
+
+
+function saveNotesToFile() {
+    
+    const notesString = JSON.stringify(notesData, null, 2);
+    fs.writeFile('./db/db.json', notesString, (err) =>
+         err
+             ? console.error(err)
+            : console.log(`New note has been written to JSON file`) 
+    );
+}
