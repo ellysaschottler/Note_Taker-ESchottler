@@ -52,6 +52,11 @@ app.post("/api/notes", (req, res) => {
     }
 });
 
+app.delete("/api/notes/:id", (req, res) => {
+    notesData = notesData.filter(note => note.id != req.params.id)
+    res.send("note deleted")
+})
+
 
 // display error page if route not found
 app.get("*", (req, res) => {
