@@ -30,10 +30,8 @@ app.get("/notes", (req, res) => {
 
 // post additional notes to the api
 app.post("/api/notes", (req, res) => {
-    res.send("Note Saved!");
 
     const {title, text } = req.body;
-
     if (title && text) {
         const newNote = {
             title,
@@ -41,16 +39,14 @@ app.post("/api/notes", (req, res) => {
             id : shortid.generate(),
          };
 
-
-         notesData.push(newNote);
-        const notesString = JSON.stringify(notesData);
-        fs.writeFile('/db/db.json', notesString, (err) =>
+        notesData.push(newNote);
+        const notesString = JSON.stringify(notesData, null, 2);
+        fs.writeFile('./db/db.json', notesString, (err) =>
              err
                  ? console.error(err)
                 : console.log(`New note has been written to JSON file`) 
         );
-    console.log(success);
-
+        res.send("Note Saved!");
     } else {
         res.status(500).json('Error in adding note');
     }
